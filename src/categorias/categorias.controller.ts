@@ -1,5 +1,7 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, HttpCode, Patch } from '@nestjs/common';
 import { CategoriasService } from './categorias.service';
+import { CrearCategoriaDto } from './dto/create-categoria.dto';
+import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 
 @Controller('categorias')
 export class CategoriasController {
@@ -7,7 +9,7 @@ export class CategoriasController {
 
   @Post()
   @HttpCode(201)
-  create(@Body() dto: any) {
+  create(@Body() dto: CrearCategoriaDto) {
     return this.service.Create(dto);
   }
 
@@ -19,6 +21,11 @@ export class CategoriasController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.service.FindOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: UpdateCategoriaDto) {
+    return this.service.update(id, dto);
   }
 
   @Delete(':id')

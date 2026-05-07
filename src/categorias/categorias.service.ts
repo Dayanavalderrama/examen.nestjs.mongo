@@ -27,6 +27,15 @@ export class CategoriasService {
     return res;
   }
 
+  async update(id: string, dto: any) {
+    const categoria = await this.FindOne(id);
+    if (dto.nombre) {
+      const existe = await this.categoriaModel.findOne({ nombre: dto.nombre, _id: { $ne: id } });
+      if (existe) throw new ConflictException('El nombre de la categoría ya existe');
+    }
+    return this.categoriaModel.findByIdAndUpdate(id, dto, { new: true });
+  }
+
   async remove(id: string) {
     const tieneProd = await this.productoModel.findOne({ categoria: id });
     if (tieneProd) throw new ConflictException('No se puede eliminar: tiene productos asociados');
